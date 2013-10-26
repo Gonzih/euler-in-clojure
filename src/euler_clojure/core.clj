@@ -245,3 +245,12 @@
                  20849603980134001723930671666823555245252804609722
                  53503534226472524250874054075591789781264330331690 ]]
       (take 10 (str (reduce + numbers)))))
+
+(defproblem 14
+  (letfn [(seq-fn [n] (cons n (lazy-seq (seq-fn (if (even? n) (/ n 2) (inc (* 3 n)))))))
+          (chain-len [n] (inc (count (take-while (fn [n] (> n 1)) (seq-fn n)))))]
+    (reduce (fn [[len1 n1] [len2 n2]]
+              (if (> len2 len1)
+                [len2 n2]
+                [len1 n1]))
+            (map (fn [n] [(chain-len n) n]) (range 1 1000001)))))
