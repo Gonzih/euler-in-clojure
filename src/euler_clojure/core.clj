@@ -76,8 +76,11 @@
                        b nums
                        c nums] [a b c])
         pow (fn [a b] (Math/pow a b))
-        pyth-triplet? (fn [[a b c]] (and (= (+ (pow a 2) (pow b 2)) (pow c 2))
-                                         (= (+ a b c) 1000)))]
+        pyth-triplet? (fn [[a b c]]
+                        (and (= (+ (pow a 2)
+                                   (pow b 2))
+                                (pow c 2))
+                             (= (+ a b c) 1000)))]
     (reduce * (first (filter pyth-triplet? triplets)))))
 
 (defproblem 10
@@ -113,14 +116,16 @@
                   (map vec)
                   vec)
         all-indexes (for [i (range 0 20) j (range 0 20)] [i j])
-        get-in-grid (fn [[x y]] (-> grid
-                                    (get x)
-                                    (get y 1)))
+        get-in-grid (fn [[x y]]
+                      (-> grid
+                          (get x)
+                          (get y 1)))
         deltas [[1 1] [1 -1] [1 0] [0 1]]
-        neighbors (fn [pos] (map (fn [[dx dy]]
-                                   (take 4 (iterate (fn [[x y]]
-                                                      [(+ dx x) (+ dy y)])
-                                                    pos)))
+        neighbors (fn [pos]
+                    (map (fn [[dx dy]]
+                           (take 4 (iterate (fn [[x y]]
+                                              [(+ dx x) (+ dy y)])
+                                            pos)))
                                  deltas))
         vals-of-neighbors    (fn [neighbors] (map (fn [line] (map get-in-grid line)) neighbors))
         product-of-neighbors (fn [neighbors] (map (fn [line] (reduce * line)) neighbors))
