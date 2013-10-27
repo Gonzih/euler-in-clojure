@@ -261,21 +261,17 @@
                 [len1 n1]))
             (map (fn [n] [(chain-len n) n]) (range 1 1000001)))))
 
-;(defproblem 15
-  (let [size 20
-        target [size size]]
-    (letfn [(possible-moves [[x y]]
-              (remove (fn [[x y]]
-                        (or (> x size)
-                            (> y size)))
-                      [[(inc x) y] [x (inc y)]]))
-            (all-possible-moves [pos]
-              (let [moves (possible-moves pos)]
-                {:pos pos
-                 :moves (map all-possible-moves moves)}))
-            (count-branches [{:keys [pos moves]}]
-              (if (empty? moves)
-                (if (= pos target) 1 0)
-                (reduce + (map count-branches moves))))]
-      (count-branches (all-possible-moves [0 0]))))
-  ;)
+(defn fact [n]
+  (reduce * (range 1N (inc n))))
+
+(defproblem 15
+  (letfn [(routes [n m]
+            (/ (fact (+ n m))
+               (* (fact n)
+                  (fact m))))]
+    (routes 20 20)))
+
+(defproblem 16
+  (letfn [(pow [base exp] (apply * (replicate exp base)))]
+    (reduce + (map #(Character/getNumericValue %)
+                   (str (pow 2N 1000))))))
