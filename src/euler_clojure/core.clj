@@ -1,5 +1,6 @@
 (ns euler-clojure.core
-  (:require [clojure.string :as s]))
+  (:require [clojure.string :as s]
+            [clojure.pprint :refer [pprint]]))
 
 (defmacro defproblem [id & body]
   `(defn ~(symbol (str 'p- id)) []
@@ -259,3 +260,22 @@
                 [len2 n2]
                 [len1 n1]))
             (map (fn [n] [(chain-len n) n]) (range 1 1000001)))))
+
+;(defproblem 15
+  (let [size 20
+        target [size size]]
+    (letfn [(possible-moves [[x y]]
+              (remove (fn [[x y]]
+                        (or (> x size)
+                            (> y size)))
+                      [[(inc x) y] [x (inc y)]]))
+            (all-possible-moves [pos]
+              (let [moves (possible-moves pos)]
+                {:pos pos
+                 :moves (map all-possible-moves moves)}))
+            (count-branches [{:keys [pos moves]}]
+              (if (empty? moves)
+                (if (= pos target) 1 0)
+                (reduce + (map count-branches moves))))]
+      (count-branches (all-possible-moves [0 0]))))
+  ;)
