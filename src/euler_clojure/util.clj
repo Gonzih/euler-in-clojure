@@ -28,6 +28,10 @@
   (or (find-element {:tag :img :title "Wrong"})
       (find-element {:tag :img :title "Correct"})))
 
+(defn show-problem [id]
+  (to (new-driver {:browser :firefox})
+      (str "https://projecteuler.net/problem=" id)))
+
 (defn submit-problem [id]
   (let [driver (future (new-driver {:browser :firefox}))
         answer (run-problem id)]
