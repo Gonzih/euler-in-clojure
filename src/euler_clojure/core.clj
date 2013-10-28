@@ -275,3 +275,48 @@
   (letfn [(pow [base exp] (apply * (replicate exp base)))]
     (reduce + (map #(Character/getNumericValue %)
                    (str (pow 2N 1000))))))
+
+(defproblem 17
+  (let [dictionary-1 {1 "one"
+                      2 "two"
+                      3 "three"
+                      4 "four"
+                      5 "five"
+                      6 "six"
+                      7 "seven"
+                      8 "eight"
+                      9 "nine"}
+        dictionary-2 {10 "ten"
+                      11 "eleven"
+                      12 "twelve"
+                      13 "thirteen"
+                      14 "fourteen"
+                      15 "fifteen"
+                      16 "sixteen"
+                      17 "seventeen"
+                      18 "eighteen"
+                      19 "nineteen"}
+        dictionary-3 {20 "twenty"
+                      30 "thirty"
+                      40 "forty"
+                      50 "fifty"
+                      60 "sixty"
+                      70 "seventy"
+                      80 "eighty"
+                      90 "ninety"}]
+    (letfn [(count-number [n]
+              (cond
+                (> 10 n) (count (get dictionary-1 n))
+                (and (<= 10 n) (> 20 n)) (count (get dictionary-2 n))
+                (and (<= 20 n) (> 100 n)) (+ (count-number (rem n 10))
+                                             (count (get dictionary-3 (- n (rem n 10)))))
+                (<= 100 n) (let [r (rem n 100)
+                                 m (count-number (/ (- n r) 100))]
+                             (if (zero? r)
+                               (+ m (count "hundred"))
+                               (+ (count-number r)
+                                  (count "hundredand")
+                                  m)))
+                :else 0))]
+      (+ (reduce + (map count-number (range 1 1000)))
+         (count "onethousand")))))
