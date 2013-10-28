@@ -1,13 +1,7 @@
 (ns euler-clojure.core
   (:require [clojure.string :as s]
-            [clojure.pprint :refer [pprint]]))
-
-(defmacro defproblem [id & body]
-  `(defn ~(symbol (str 'p- id)) []
-     ~@body))
-
-(defmacro runproblem [id]
-  `(~(symbol (str 'p- id))))
+            [clojure.pprint :refer [pprint]]
+            [euler-clojure.util :refer :all]))
 
 (defproblem 1
   (reduce + (filter #(or (zero? (mod % 3))
